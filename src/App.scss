@@ -1,0 +1,32 @@
+.row_filter {
+  width: 100%;
+  background-color: #dee2e6;
+  padding: 1rem;
+  justify-content: center;
+  display: flex;
+    ul.pagination {
+      margin-bottom: 0;
+  }
+}
+
+.table_data {
+  .table_functionality {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  .contain {
+    min-height: 1rem;
+  }
+}
+
+.main_pagination {
+  display: flex;
+  .option_btn {
+    width: 100%;
+    background-color: #dee2e6;
+    padding: 1rem;
+    justify-content: center;
+  }
+}
