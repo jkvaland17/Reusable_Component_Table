@@ -1,20 +1,37 @@
 import React from "react";
+import { Table } from "react-bootstrap";
 
-const TableData = ({ data, page, showPerPage }) => {
-  const filteredData = data.slice(page * showPerPage, (page + 1) * showPerPage);
+const TableData = ({ data = null, colums = null }) => {
+  const getCaps = (head, field) => {
+    if (head) return field.toUpperCase();
+    return field.toUpperCase();
+  };
   return (
     <>
+      <Table>
+        <thead>
+          <tr>
+            {colums.map((head, index) => (
+              <th key={index}>{getCaps(head.header, head.field)}</th>
+            ))}
+          </tr>
+        </thead>
         <tbody className="contain">
-          {filteredData.map(({ id, name, lastname, post, city }) => (
-            <tr key={id}>
-              <td>{id}</td>
-              <td>{name}</td>
-              <td>{lastname}</td>
-              <td>{post}</td>
-              <td>{city}</td>
-            </tr>
-          ))}
+          {data &&
+            data.map((row, index) => (
+              <tr key={index}>
+                {colums.map((col, index) => (
+                  <td key={index}>{row[col.field]}</td>
+                ))}
+              </tr>
+            ))}
         </tbody>
+      </Table>
+      {data ? null : (
+        <p style={{ textAlign: "center" }}>
+          <strong>No Row To Show :)</strong>
+        </p>
+      )}
     </>
   );
 };

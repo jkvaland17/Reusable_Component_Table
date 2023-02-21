@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
 import PagePagination from "./Pagination";
 import Data from "./Data.json";
 import TableData from "./TableData";
-import Header from "./Header";
 import Sorting from "./Sorting";
 
 const CustomeTable = () => {
   const [data, setData] = useState([]);
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
+  const TData = data.slice(page * showPerPage, (page + 1) * showPerPage);
 
   useEffect(() => {
     setData(Data);
@@ -31,15 +30,19 @@ const CustomeTable = () => {
     const pageValue = Number(e.target.value);
     setShowPerPage(pageValue);
   };
-  const row = ["No", "First Name", "Last Name", "Post", "City"];
+  const colums = [
+    { field: "id", header: "NO" },
+    { field: "name", header: "First Name" },
+    { field: "lastname", header: "Last Name" },
+    { field: "post", header: "Post" },
+    { field: "city", header: "City" },
+  ];
+
   return (
     <>
       <div className="table_data">
         <Sorting handleSort={handleSort} reset={reset} />
-        <Table>
-          <Header row={row} />
-          <TableData data={data} page={page} showPerPage={showPerPage} />
-        </Table>
+        <TableData data={TData} colums={colums} />
       </div>
       <div className="main_pagination">
         <PagePagination
