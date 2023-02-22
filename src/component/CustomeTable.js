@@ -1,49 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Table } from "react-bootstrap";
 import PagePagination from "./Pagination";
-import Data from "./Data.json";
-import TableData from "./TableData";
-import Sorting from "./Sorting";
 
-const CustomeTable = () => {
-  const [data, setData] = useState([]);
+const CustomeTable = ({ data, columns }) => {
+  const [sortConfig, setSortConfig] = useState(null);
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
-  const TData = data.slice(page * showPerPage, (page + 1) * showPerPage);
 
-  useEffect(() => {
-    setData(Data);
-  }, []);
+  const sortedData = React.useMemo(() => {
+    let sortedData = [...data];
+    if (sortConfig !== null) {
+      sortedData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortedData;
+  }, [data, sortConfig]);
 
-  const SortBy = () => {
-    "name";
-    "city";
-  };
-  const handleSort = (key) => {
-    SortBy(key);
-    setData([...data].sort((a, b) => a[key].localeCompare(b[key])));
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
   };
 
-  const reset = () => {
-    window.location.reload();
-  };
+  //   pagination start
   const changeOption = (e) => {
     const pageValue = Number(e.target.value);
     setShowPerPage(pageValue);
   };
-  const colums = [
-    { field: "id", header: "NO" },
-    { field: "name", header: "First Name" },
-    { field: "lastname", header: "Last Name" },
-    { field: "post", header: "Post" },
-    { field: "city", header: "City" },
-  ];
-
+  // pagination end
   return (
     <>
-      <div className="table_data">
-        <Sorting handleSort={handleSort} reset={reset} />
-        <TableData data={TData} colums={colums} />
-      </div>
+      <Table>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.key} onClick={() => requestSort(column.key)}>
+                {column.label}
+                {sortConfig &&
+                  sortConfig.key === column.key &&
+                  (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedData
+            .slice(page * showPerPage, (page + 1) * showPerPage)
+            .map((row) => (
+              <tr key={row.id}>
+                {columns.map((column) => (
+                  <td key={column.key}>{row[column.key]}</td>
+                ))}
+              </tr>
+            ))}
+        </tbody>
+      </Table>
       <div className="main_pagination">
         <PagePagination
           showPerPage={showPerPage}

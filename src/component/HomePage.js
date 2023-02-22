@@ -1,5 +1,5 @@
 import React from "react";
-import Demo from "../component/demo";
+import CustomeTable from "./CustomeTable";
 import Data from "./Data.json";
 
 const columns = [
@@ -12,7 +12,7 @@ const columns = [
 const HomePage = () => {
   return (
     <>
-      <Demo data={Data} columns={columns} />
+      <CustomeTable data={Data} columns={columns} />
     </>
   );
 };
