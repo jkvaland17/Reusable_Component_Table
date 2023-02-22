@@ -1,5 +1,4 @@
 import React from "react";
-//import CustomeTable from "./CustomeTable";
 import Demo from "../component/demo";
 import Data from "./Data.json";
 
@@ -13,7 +12,6 @@ const columns = [
 const HomePage = () => {
   return (
     <>
-      {/* <CustomeTable /> */}
       <Demo data={Data} columns={columns} />
     </>
   );
