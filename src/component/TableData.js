@@ -2,17 +2,13 @@ import React from "react";
 import { Table } from "react-bootstrap";
 
 const TableData = ({ data = null, colums = null }) => {
-  const getCaps = (head, field) => {
-    if (head) return field.toUpperCase();
-    return field.toUpperCase();
-  };
   return (
     <>
       <Table>
         <thead>
           <tr>
             {colums.map((head, index) => (
-              <th key={index}>{getCaps(head.header, head.field)}</th>
+              <th key={index}>{head.header}</th>
             ))}
           </tr>
         </thead>
