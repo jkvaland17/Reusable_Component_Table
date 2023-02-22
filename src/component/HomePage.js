@@ -8,6 +8,7 @@ const columns = [
   { key: "lastname", label: "Last Name" },
   { key: "post", label: "Post" },
   { key: "city", label: "City" },
+  { key: "btn", label: "Action" },
 ];
 const HomePage = () => {
   return (
