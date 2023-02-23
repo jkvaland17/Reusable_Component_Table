@@ -1,109 +1,39 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { Table } from "react-bootstrap";
-import PagePagination from "./Pagination";
+// import React from 'react';
 
-const CustomeTable = ({ data, columns }) => {
-  const [sortConfig, setSortConfig] = useState(null);
-  const [showPerPage, setShowPerPage] = useState(10);
-  const [page, setPage] = useState();
-  const [deldata, setdeldata] = useState([]);
+// const Button = ({ onClick, label }) => {
+//   return (
+//     <button onClick={onClick}>{label}</button>
+//   );
+// };
 
-  const sortedData = useMemo(() => {
-    let sortedData = [...data];
-    if (sortConfig !== null) {
-      sortedData.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    setdeldata(sortedData);
-    return sortedData;
-  }, [data, sortConfig]);
+// export default Button;
 
-  useEffect(() => {}, [deldata]);
+// import React from 'react';
+// import Button from './Button';
 
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (
-      sortConfig &&
-      sortConfig.key === key &&
-      sortConfig.direction === "ascending"
-    ) {
-      direction = "descending";
-    }
-    setSortConfig({ key, direction });
-  };
+// const Table = ({ data }) => {
+//   return (
+//     <table>
+//       <thead>
+//         <tr>
+//           <th>ID</th>
+//           <th>Name</th>
+//           <th>Action</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {data.map(item => (
+//           <tr key={item.id}>
+//             <td>{item.id}</td>
+//             <td>{item.name}</td>
+//             <td>
+//               <Button onClick={() => console.log(`Delete item ${item.id}`)} label="Delete" />
+//             </td>
+//           </tr>
+//         ))}
+//       </tbody>
+//     </table>
+//   );
+// };
 
-  //   pagination start
-  const changeOption = (e) => {
-    const pageValue = Number(e.target.value);
-    setShowPerPage(pageValue);
-  };
-  // pagination end
-
-  // remove colume start
-  const handleDelete = (id) => {
-    console.log(id);
-    let abcd = deldata;
-    abcd.splice(id, 1);
-    console.log(abcd);
-    setdeldata([...abcd]);
-  };
-  // remove colume end
-  return (
-    <>
-      <Table>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th key={column.key} onClick={() => requestSort(column.key)}>
-                {column.label}
-                {sortConfig &&
-                  sortConfig.key === column.key &&
-                  (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {deldata
-            .slice(page * showPerPage, (page + 1) * showPerPage)
-            .map((row, index) => (
-              <tr key={row.id}>
-                {columns.map((column) => {
-                  if (column.key === "btn") {
-                    return (
-                      <button
-                        onClick={() => handleDelete(index)}
-                        key={column.key}
-                      >
-                        delete
-                      </button>
-                    );
-                  }
-                  return <td key={column.key}>{row[column.key]}</td>;
-                })}
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-      <div className="main_pagination">
-        <PagePagination
-          showPerPage={showPerPage}
-          onPagination={(start) => setPage(start / showPerPage)}
-          total={data.length}
-          page={page}
-          setPage={setPage}
-          changeOption={changeOption}
-        />
-      </div>
-    </>
-  );
-};
-
-export default CustomeTable;
+// export default Table;

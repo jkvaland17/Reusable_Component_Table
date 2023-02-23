@@ -13,7 +13,7 @@ const columns = [
 const HomePage = () => {
   return (
     <>
-      <CustomeTable data={Data} columns={columns} />
+      <CustomeTable data={Data} columns={columns} btn={"delete"}/>
     </>
   );
 };

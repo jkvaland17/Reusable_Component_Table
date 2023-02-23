@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import PagePagination from "./Pagination";
+import Button from '../component/Button';
 
-const CustomeTable = ({ data, columns }) => {
+const CustomeTable = ({ data, columns, btn }) => {
   const [sortConfig, setSortConfig] = useState(null);
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
@@ -25,7 +26,7 @@ const CustomeTable = ({ data, columns }) => {
     return sortedData;
   }, [data, sortConfig]);
 
-  useEffect(() => {}, [deldata,sortedData]);
+  useEffect(() => {}, [deldata, sortedData]);
 
   const requestSort = (key) => {
     let direction = "ascending";
@@ -48,16 +49,14 @@ const CustomeTable = ({ data, columns }) => {
 
   // remove colume start
   const handleDelete = (id) => {
-    console.log(id);
     let abcd = deldata;
     abcd.splice(id, 1);
-    console.log(abcd);
     setdeldata([...abcd]);
   };
   // remove colume end
   return (
     <>
-      <Table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             {columns.map((column) => (
@@ -78,12 +77,12 @@ const CustomeTable = ({ data, columns }) => {
                 {columns.map((column) => {
                   if (column.key === "btn") {
                     return (
-                      <button
+                      <Button
                         onClick={() => handleDelete(index)}
                         key={column.key}
                       >
-                        delete
-                      </button>
+                        {btn}
+                      </Button>
                     );
                   }
                   return <td key={column.key}>{row[column.key]}</td>;
