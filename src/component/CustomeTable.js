@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import PagePagination from "./Pagination";
 
@@ -6,7 +6,8 @@ const CustomeTable = ({ data, columns }) => {
   const [sortConfig, setSortConfig] = useState(null);
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
-  const [deldata, setdeldata] = useState();
+  const [deldata, setdeldata] = useState([]);
+
   const sortedData = useMemo(() => {
     let sortedData = [...data];
     if (sortConfig !== null) {
@@ -20,8 +21,11 @@ const CustomeTable = ({ data, columns }) => {
         return 0;
       });
     }
+    setdeldata(sortedData);
     return sortedData;
   }, [data, sortConfig]);
+
+  useEffect(() => {}, [deldata,sortedData]);
 
   const requestSort = (key) => {
     let direction = "ascending";
@@ -44,9 +48,11 @@ const CustomeTable = ({ data, columns }) => {
 
   // remove colume start
   const handleDelete = (id) => {
-    sortedData.splice(id, 1);
-    setdeldata(sortedData);
-    console.log(deldata);
+    console.log(id);
+    let abcd = deldata;
+    abcd.splice(id, 1);
+    console.log(abcd);
+    setdeldata([...abcd]);
   };
   // remove colume end
   return (
@@ -65,15 +71,15 @@ const CustomeTable = ({ data, columns }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedData
+          {deldata
             .slice(page * showPerPage, (page + 1) * showPerPage)
-            .map((row) => (
+            .map((row, index) => (
               <tr key={row.id}>
                 {columns.map((column) => {
                   if (column.key === "btn") {
                     return (
                       <button
-                        onClick={() => handleDelete(row.id)}
+                        onClick={() => handleDelete(index)}
                         key={column.key}
                       >
                         delete
