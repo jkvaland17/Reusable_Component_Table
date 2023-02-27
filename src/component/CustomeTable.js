@@ -68,8 +68,8 @@ const CustomeTable = ({ data, columns }) => {
     let checkbox = deldata.filter((fval) => {
       return fval.name.includes(gd);
     });
+    console.log(gd);
     setDataList(checkbox);
-    console.log(gd)
   };
 
   return (
@@ -78,7 +78,7 @@ const CustomeTable = ({ data, columns }) => {
         <thead>
           <tr>
             {columns.map((column) => {
-              let filsorter =
+              let filterd =
                 column.sort === true ? (
                   <>
                     <span>
@@ -89,31 +89,29 @@ const CustomeTable = ({ data, columns }) => {
                         onClick={() => requestSort(column.key)}
                       ></i>
                     </span>
-                    <Popup passing={p1} />
+                    {column.filter === true ? <Popup passing={p1} /> : ""}
                   </>
-                ) : column.filter === true ? (
-                  <Popup passing={p1} />
                 ) : (
                   column.label
                 );
 
-              return <th key={column.key}>{filsorter}</th>;
+              return <th key={column.key}>{filterd}</th>;
             })}
           </tr>
         </thead>
         <tbody>
           {deldata
-                .slice(page * showPerPage, (page + 1) * showPerPage)
-                .map((row, index) => (
-                  <tr key={row.id}>
-                    {columns.map((column) => {
-                      if (column.key === "action") {
-                        return <td key={index}>{column.render(row)}</td>;
-                      }
-                      return <td key={column.key}>{row[column.key]}</td>;
-                    })}
-                  </tr>
-                ))}
+            .slice(page * showPerPage, (page + 1) * showPerPage)
+            .map((row, index) => (
+              <tr key={row.id}>
+                {columns.map((column) => {
+                  if (column.key === "action") {
+                    return <td key={index}>{column.render(row)}</td>;
+                  }
+                  return <td key={column.key}>{row[column.key]}</td>;
+                })}
+              </tr>
+            ))}
         </tbody>
       </Table>
       <div className="main_pagination">

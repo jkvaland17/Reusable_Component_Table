@@ -17,7 +17,6 @@ const columns = [
   },
 ];
 
-
 const HomePage = () => {
   return (
     <>
