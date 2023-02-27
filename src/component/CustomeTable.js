@@ -8,7 +8,7 @@ const CustomeTable = ({ data, columns }) => {
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
   const [deldata, setdeldata] = useState([]);
-  const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState();
 
   const sortedData = useMemo(() => {
     let sortedData = [...data];
@@ -68,10 +68,10 @@ const CustomeTable = ({ data, columns }) => {
     let checkbox = deldata.filter((fval) => {
       return fval.name.includes(gd);
     });
-    console.log(gd);
     setDataList(checkbox);
   };
 
+  let zxy = dataList === undefined ? deldata : dataList;
   return (
     <>
       <Table striped bordered hover>
@@ -100,7 +100,7 @@ const CustomeTable = ({ data, columns }) => {
           </tr>
         </thead>
         <tbody>
-          {deldata
+          {zxy
             .slice(page * showPerPage, (page + 1) * showPerPage)
             .map((row, index) => (
               <tr key={row.id}>
