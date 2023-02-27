@@ -1,13 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Table } from "react-bootstrap";
 import PagePagination from "./Pagination";
-import Button from '../component/Button';
+import Popup from "../component/Popup";
 
-const CustomeTable = ({ data, columns, btn }) => {
+const CustomeTable = ({ data, columns }) => {
   const [sortConfig, setSortConfig] = useState(null);
   const [showPerPage, setShowPerPage] = useState(10);
   const [page, setPage] = useState();
   const [deldata, setdeldata] = useState([]);
+  const [dataList, setDataList] = useState([]);
 
   const sortedData = useMemo(() => {
     let sortedData = [...data];
@@ -48,47 +49,71 @@ const CustomeTable = ({ data, columns, btn }) => {
   // pagination end
 
   // remove colume start
-  const handleDelete = (id) => {
-    let abcd = deldata;
-    abcd.splice(id, 1);
-    setdeldata([...abcd]);
-  };
+  // const handleDelete = (id) => {
+  //   let abcd = deldata;
+  //   abcd.splice(id, 1);
+  //   setdeldata([...abcd]);
+  // };
   // remove colume end
+  // const handelcheckbox = (e) => {
+  //   const id = e.target.value;
+  //   let checkbox = deldata.filter((fval) => {
+  //     return fval.name.includes(id);
+  //   });
+  //   setFdata(checkbox);
+  //   console.log(fdata);
+  // };
+
+  const p1 = (gd) => {
+    let checkbox = deldata.filter((fval) => {
+      return fval.name.includes(gd);
+    });
+    setDataList(checkbox);
+    console.log(gd)
+  };
+
   return (
     <>
       <Table striped bordered hover>
         <thead>
           <tr>
-            {columns.map((column) => (
-              <th key={column.key} onClick={() => requestSort(column.key)}>
-                {column.label}
-                {sortConfig &&
-                  sortConfig.key === column.key &&
-                  (sortConfig.direction === "ascending" ? " ▲" : " ▼")}
-              </th>
-            ))}
+            {columns.map((column) => {
+              let filsorter =
+                column.sort === true ? (
+                  <>
+                    <span>
+                      {column.label}
+                      <i
+                        style={{ marginLeft: "1rem" }}
+                        className="fa-solid fa-sort"
+                        onClick={() => requestSort(column.key)}
+                      ></i>
+                    </span>
+                    <Popup passing={p1} />
+                  </>
+                ) : column.filter === true ? (
+                  <Popup passing={p1} />
+                ) : (
+                  column.label
+                );
+
+              return <th key={column.key}>{filsorter}</th>;
+            })}
           </tr>
         </thead>
         <tbody>
           {deldata
-            .slice(page * showPerPage, (page + 1) * showPerPage)
-            .map((row, index) => (
-              <tr key={row.id}>
-                {columns.map((column) => {
-                  if (column.key === "btn") {
-                    return (
-                      <Button
-                        onClick={() => handleDelete(index)}
-                        key={column.key}
-                      >
-                        {btn}
-                      </Button>
-                    );
-                  }
-                  return <td key={column.key}>{row[column.key]}</td>;
-                })}
-              </tr>
-            ))}
+                .slice(page * showPerPage, (page + 1) * showPerPage)
+                .map((row, index) => (
+                  <tr key={row.id}>
+                    {columns.map((column) => {
+                      if (column.key === "action") {
+                        return <td key={index}>{column.render(row)}</td>;
+                      }
+                      return <td key={column.key}>{row[column.key]}</td>;
+                    })}
+                  </tr>
+                ))}
         </tbody>
       </Table>
       <div className="main_pagination">
